@@ -4,14 +4,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -28,10 +33,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lint.kotlin.metadata.Visibility
 import com.atom.firstappcompose.ui.theme.FirstAppComposeTheme
-import androidx.compose.material3.IconButton
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,20 +42,27 @@ class MainActivity : ComponentActivity() {
         setContent {
             FirstAppComposeTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Box(
-                        modifier=Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ){
-                       TextoConDatos()
-                    }
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        TextoSimple()
+                        Spacer(modifier = Modifier.height(16.dp))
+                        TextoConDatos()
+                        Spacer(modifier = Modifier.height(16.dp))
+                        TextoConPassword()
                     }
                 }
             }
         }
     }
+}
 
 @Composable
-fun TextoConPassword(){
+fun TextoConPassword() {
     var password by remember {
         mutableStateOf("")
     }
@@ -63,53 +72,51 @@ fun TextoConPassword(){
     }
 
     OutlinedTextField(
-        values=password,
-        onValueChange = {password=it},
-        label={Text("Contraseña")},
-        placeholder={Text("Tecle la contraseña aqui")},
-        singleLine=true,
-        modifier= Modifier.padding(100.dp),
+        value = password,
+        onValueChange = { password = it },
+        label = { Text("Contraseña") },
+        placeholder = { Text("Tecle la contraseña aqui") },
+        singleLine = true,
+        modifier = Modifier.padding(16.dp),
         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-        keyBoardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         trailingIcon = {
             val image = if (passwordVisible)
                 Icons.Filled.Visibility
-            else Icons.Filled.VisibilityOff
+            else
+                Icons.Filled.VisibilityOff
 
-        IconButton(onClick = {passwordVisible = !passwordVisible}){
-            Icon(imageVector  = image, "Mostrar Contraseña")
+            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                Icon(imageVector = image, "Mostrar Contraseña")
+            }
         }
-        }
-
-
     )
-
 }
 
 @Composable
-fun TextoSimple(){
+fun TextoSimple() {
     var texto by remember {
         mutableStateOf("")
     }
     TextField(
-        value=texto,
-        onValueChange = {texto=it}
+        value = texto,
+        onValueChange = { texto = it }
     )
 }
+
 @Composable
-fun TextoConDatos(){
-    var texto2 by remember{
+fun TextoConDatos() {
+    var texto2 by remember {
         mutableStateOf("")
     }
     TextField(
-        value=texto2,
-        onValueChange = {texto2=it},
-        label={Text("Usuario")},
-        placeholder={Text("Tecle el usuario aqui")},
+        value = texto2,
+        onValueChange = { texto2 = it },
+        label = { Text("Usuario") },
+        placeholder = { Text("Tecle el usuario aqui") },
         leadingIcon = {
-            Icon(imageVector= Icons.Default.Person, contentDescription=null)
+            Icon(imageVector = Icons.Default.Person, contentDescription = null)
         }
-
     )
 }
 
@@ -125,6 +132,14 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun GreetingPreview() {
     FirstAppComposeTheme {
-        Greeting("Android")
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            TextoSimple()
+            Spacer(modifier = Modifier.height(16.dp))
+            TextoConPassword()
+        }
     }
 }
